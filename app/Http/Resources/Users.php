@@ -17,10 +17,13 @@ class Users extends ResourceCollection
         return [
         'id' => $this->id,
         'name' => $this->name,
+        'remember_token' => $this->remember_token,
         'email' => $this->email,
         'created_at' => $this->created_at,
         'updated_at' => $this->updated_at,
+        'role' => $this->role,
                     
         ]; 
     }
 }
+

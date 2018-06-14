@@ -26,12 +26,13 @@ class PassportController extends Controller
         if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){
             $user = Auth::user();
             $success['token'] =  $user->createToken('MyApp')->accessToken;
-            return response()->json(['success' => $success], $this->successStatus);
+            return response()->json(['success' => $success, 'role' => $user->role], $this->successStatus);
         }
         else{
             return response()->json(['error'=>'Unauthorised'], 401);
         }
     }
+
 
     /**
      * Register api
@@ -75,5 +76,10 @@ else {
         $user = Auth::user();
         return $prova = $user;
         
+    }
+
+    public function  iSAdmin(){
+        $user = Auth::user();
+        return $prova = $user['role'];
     }
 }

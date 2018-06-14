@@ -109,7 +109,116 @@ class AnimeController extends Controller
                             return  response()->json(['success2'=>1]);
 
                             }
+
                                    }
+    public function deleteAnime(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+                'id' => 'required',
+
+            ]);
+
+
+        if ($validator->fails() ) {
+            return response()->json($validator->errors()->first(), 401);
+        }
+        else {
+            $input = $request->all();
+            $id = $input['id'];
+            $animeLike = AnimeLike::all()->where('id_anime',$id)->first();
+            $anime = Anime::all()->where('id',$id)->first();
+
+            if($anime == '' ){
+                return response()->json(['fail' => 'non esiste']);
+
+            }
+            else{
+                $anime->delete();
+                $animeLike->delete();
+
+                return response()->json(['success' => 'eliminato']);
+
+            }
+            }
+    }
+    public function updateAnime(Request $request)
+    {
+        $role =
+
+        $input = $request->all();
+        $validator = Validator::make($request->all(), [
+            'id' => ['required', 'regex:/(^[0-9 ]+$)+/'],
+            'titolo'=>  ['required', 'regex:/(^[A-Za-z0-9 ]+$)+/'],
+            'trama' => ['required', 'regex:/(^[A-Za-z0-9 ]+$)+/'],
+            'autore' => ['required', 'regex:/(^[A-Za-z ]+$)+/'],
+            'img' =>  ['required', 'regex:/(^[A-Za-z0-9. \/]+$)+/'],
+            'img2' =>['required', 'regex:/(^[A-Za-z0-9. \/]+$)+/'],
+            'stagioni' => ['required', 'regex:/(^[0-9 ]+$)+/'],
+            'episodi' => ['required', 'regex:/(^[0-9 ]+$)+/'],
+            'genere' => ['required', 'regex:/(^[A-Za-z ]+$)+/'],
+            'img_ang'=> ['required', 'regex:/(^[A-Za-z0-9 ]+$)+/'],
+            'role' => ['required','regex:/(^[1-2]+$)+/']
+        ]);
+        if ($validator->fails() ) {
+            return response()->json($validator->errors()->first(), 401);
+        }
+        else {
+            if (isset($input['id']) ||
+                isset($input['titolo']) ||
+                isset($input['trama']) ||
+                isset($input['autore']) &&
+                isset($input['img']) &&
+                isset($input['genere']) &&
+                isset($input['img2']) &&
+                isset($input['stagioni']) &&
+                isset($input['img_ang']) &&
+                isset($input['episodi']) &&
+                isset($input['role'])) {
+                if($input['role'] == '2') {
+
+
+                    $id = $input['id'];
+                    $trama = $input['trama'];
+                    $autore = $input['autore'];
+                    $genere = $input['genere'];
+                    $img = $input['img'];
+                    $img2 = $input['img2'];
+                    $img_ang = $input['img_ang'];
+                    $titolo = $input['titolo'];
+                    $stagioni = $input['stagioni'];
+                    $episodi = $input['episodi'];
+
+
+                    $anime = DB::table('animes')->where('id', $id)->update([
+                        'id' => $id,
+                        'titolo' => $titolo,
+                        'trama' => $trama,
+                        'autore' => $autore,
+                        'img' => $img,
+                        'img2' => $img2,
+                        'stagioni' => $stagioni,
+                        'episodi' => $episodi,
+                        'genere' => $genere,
+                        'img_ang' => $img_ang
+
+                    ]);
+                    if ($anime == 0) {
+                        return Anime::all()->where('id', $id);
+
+                    } else {
+                        return response()->json(['errore' => 'errore']);
+                    }
+                }
+                else
+                    {
+                        return response()->json(['errore' => 'errore']);
+
+                    }
+
+            }
+        }
+    }
+
 
 
     

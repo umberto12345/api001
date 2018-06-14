@@ -16,10 +16,15 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::middleware('auth:admin')->get('/admin',function (Request $request){
+
+    return $request->all();
+});
 
 // list anime
 
 Route::get('anime','AnimeController@index');
+Route::post('deleteAnime','AnimeController@deleteAnime');
 
 //list single anime
 Route::post('anime','AnimeController@show');
@@ -35,6 +40,13 @@ Route::group(['middleware' => 'auth:api'], function(){
 
 });
 Route::group(['middleware' => 'auth:api'], function(){
-	Route::post('likes','AnimeController@uplikes');
+    Route::post('likes','AnimeController@uplikes');
 
 });
+
+Route::group(['middleware' => 'auth:api'], function(){
+    Route::get('admin', 'API\PassportController@IsAdmin');
+});
+
+Route::post('updateAni', 'AnimeController@updateAnime');
+
